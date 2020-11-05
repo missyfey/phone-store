@@ -20,6 +20,12 @@ class ProductProvider extends Component {
 
     componentDidMount(){
         this.getData()
+        //get data from local storage
+        const storageCart = localStorage.getItem('cart')
+        const cart = JSON.parse(storageCart)
+        this.setState({
+            cart
+        })
     }
 
     getData=()=>{
@@ -48,10 +54,8 @@ class ProductProvider extends Component {
                 item.count = 1
                 item.total = item.price
             }
-        })
-        
-        let selectedItem = this.getProduct(id)
-
+        })        
+        let selectedItem = this.getProduct(id)        
         this.setState({
             products: tempProducts,
             cart:[...this.state.cart , selectedItem]
@@ -126,7 +130,10 @@ class ProductProvider extends Component {
         
         return {tax, total, subtotal}
     }
-    addTotal = ()=>{
+    addTotal = ()=>{                
+        //add to local storage      
+        localStorage.setItem('cart', (JSON.stringify(this.state.cart)))
+
         const totals = this.getTotal()
         let {total, subtotal, tax} = totals
         this.setState({
